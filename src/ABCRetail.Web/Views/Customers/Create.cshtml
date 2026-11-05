@@ -1,0 +1,18 @@
+@model Customer
+@{
+    ViewData["Title"] = "Add customer";
+}
+
+<h1 class="page-title">Add customer</h1>
+<p class="page-lead">This writes a new entity to the Customers table.</p>
+<div class="panel">
+    <form asp-action="Create" method="post">
+        <partial name="_Form" model="Model" />
+        <button type="submit" class="btn btn-teal">Save customer</button>
+        <a class="btn btn-link" asp-action="Index">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

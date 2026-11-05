@@ -1,0 +1,30 @@
+@model Product
+@{
+    ViewData["Title"] = Model.ProductName;
+}
+
+<h1 class="page-title">@Model.ProductName</h1>
+<p class="page-lead">@Model.Category</p>
+<div class="panel">
+    <div class="row">
+        <div class="col-md-3">
+            @if (!string.IsNullOrWhiteSpace(Model.ImageBlobName))
+            {
+                <img class="img-fluid rounded" src="@Url.Action("Image", new { id = Model.RowKey })" alt="@Model.ProductName" />
+            }
+        </div>
+        <div class="col-md-9">
+            <p>@Model.Description</p>
+            <dl class="row">
+                <dt class="col-sm-4">Price</dt>
+                <dd class="col-sm-8">@Model.Price.ToString("C")</dd>
+                <dt class="col-sm-4">Stock</dt>
+                <dd class="col-sm-8">@Model.StockQuantity</dd>
+                <dt class="col-sm-4">Blob name</dt>
+                <dd class="col-sm-8"><code>@(Model.ImageBlobName ?? "None")</code></dd>
+            </dl>
+            <a class="btn btn-teal" asp-action="Edit" asp-route-id="@Model.RowKey">Edit</a>
+            <a class="btn btn-link" asp-action="Index">Back</a>
+        </div>
+    </div>
+</div>

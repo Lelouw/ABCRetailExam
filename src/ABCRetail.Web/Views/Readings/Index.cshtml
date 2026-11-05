@@ -1,0 +1,112 @@
+@model ReadingsPage
+@{
+    ViewData["Title"] = "Live readings";
+    var input = new ReadingInput();
+}
+
+<h1 class="page-title">Live readings</h1>
+<p class="page-lead">A reading is placed on the <strong>telemetry-ingest</strong> queue. The function validates it, marks Normal, Warning, or Critical, and stores that result in <strong>TelemetryDb</strong>.</p>
+
+@if (!Model.DatabaseConfigured)
+{
+    <div class="alert alert-warning">The TelemetryDb connection string is not configured yet.</div>
+}
+else if (!string.IsNullOrWhiteSpace(Model.Error))
+{
+    <div class="alert alert-danger">@Model.Error</div>
+}
+else
+{
+    <div class="stat-grid">
+        <div class="stat"><span>Processed</span><strong>@Model.Summary.Total</strong></div>
+        <div class="stat"><span>Normal</span><strong>@Model.Summary.Normal</strong></div>
+        <div class="stat"><span>Warning</span><strong>@Model.Summary.Warning</strong></div>
+        <div class="stat"><span>Critical</span><strong>@Model.Summary.Critical</strong></div>
+    </div>
+}
+
+<div class="row g-4 mb-4">
+    <div class="col-lg-7">
+        <div class="panel">
+            <h2 class="h5">Send one reading</h2>
+            <form asp-action="Ingest" method="post">
+                @Html.AntiForgeryToken()
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label" for="DeviceId">Device</label>
+                        <input class="form-control" id="DeviceId" name="DeviceId" value="@input.DeviceId" maxlength="64" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="Metric">Metric</label>
+                        <select class="form-select" id="Metric" name="Metric">
+                            @foreach (var metric in TelemetryMetrics.All)
+                            {
+                                <option value="@metric">@metric</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label" for="Value">Value</label>
+                        <input class="form-control" id="Value" name="Value" type="number" step="0.1" value="@input.Value" />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-teal mt-3">Queue reading</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="panel">
+            <h2 class="h5">Simulate traffic</h2>
+            <p class="text-muted">Queues a burst of mixed readings so the function and the database can be watched under load.</p>
+            <form asp-action="Simulate" method="post" class="d-flex gap-2">
+                @Html.AntiForgeryToken()
+                <input class="form-control" name="count" type="number" min="1" max="200" value="50" />
+                <button type="submit" class="btn btn-outline-secondary">Send burst</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <h2 class="h5">Processed readings</h2>
+    @if (Model.Readings.Count == 0)
+    {
+        <p class="text-muted mb-0">No rows yet. Queue a reading, let the function run, then refresh this page.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Device</th>
+                        <th>Metric</th>
+                        <th>Value</th>
+                        <th>Status</th>
+                        <th>Reason</th>
+                        <th>Processed (UTC)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var reading in Model.Readings)
+                    {
+                        var badge = reading.Status switch
+                        {
+                            ReadingStatuses.Normal => "badge-processed",
+                            ReadingStatuses.Warning => "badge-queued",
+                            _ => "badge-rejected"
+                        };
+                        <tr>
+                            <td>@reading.DeviceId</td>
+                            <td>@reading.Metric</td>
+                            <td>@reading.Value.ToString("0.#")</td>
+                            <td><span class="status-badge @badge">@reading.Status</span></td>
+                            <td>@reading.Reason</td>
+                            <td>@reading.ProcessedAtUtc.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

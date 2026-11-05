@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ABCRetail.Functions/ABCRetail.Functions.csproj" />
+    <Project Path="src/ABCRetail.Shared/ABCRetail.Shared.csproj" />
+    <Project Path="src/ABCRetail.Web/ABCRetail.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ABCRetail.Shared.Tests/ABCRetail.Shared.Tests.csproj" />
+  </Folder>
+</Solution>

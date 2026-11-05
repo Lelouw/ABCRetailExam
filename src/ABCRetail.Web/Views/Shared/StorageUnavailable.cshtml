@@ -1,0 +1,10 @@
+@{
+    ViewData["Title"] = "Storage unavailable";
+}
+
+<h1 class="page-title">Azure Storage could not be reached</h1>
+<p class="page-lead">The connection string is set, but the storage service did not respond.</p>
+<div class="panel">
+    <p>For a local demo, start Azurite in another terminal with <code>azurite --silent</code>, then refresh this page.</p>
+    <p class="mb-0">For the deployed site, check that <code>AzureStorage__ConnectionString</code> on the App Service is the connection string from the storage account access keys.</p>
+</div>

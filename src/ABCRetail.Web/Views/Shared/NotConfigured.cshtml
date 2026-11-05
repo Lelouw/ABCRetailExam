@@ -1,0 +1,10 @@
+@{
+    ViewData["Title"] = "Storage not configured";
+}
+
+<h1 class="page-title">Azure Storage is not configured</h1>
+<p class="page-lead">This page needs a storage connection string before it can read or write data.</p>
+<div class="panel">
+    <p>For a local demo, install and start Azurite, then run the web app with the Development environment. That environment already points at <code>UseDevelopmentStorage=true</code>.</p>
+    <p class="mb-0">For Azure, set the App Service application setting <code>AzureStorage__ConnectionString</code> to the storage account connection string. Do not put that secret in source control.</p>
+</div>

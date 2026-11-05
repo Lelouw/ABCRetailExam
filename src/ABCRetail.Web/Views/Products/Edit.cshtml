@@ -1,0 +1,24 @@
+@model ProductForm
+@{
+    ViewData["Title"] = "Edit product";
+}
+
+<h1 class="page-title">Edit product</h1>
+<p class="page-lead">Stock shown here is the current table value. Orders and inventory functions can change it after you save.</p>
+<div class="panel">
+    @if (Model.HasImage)
+    {
+        <img class="thumb mb-3" src="@Url.Action("Image", new { id = Model.RowKey })" alt="" />
+    }
+    <form asp-action="Edit" asp-route-id="@Model.RowKey" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="RowKey" />
+        <input type="hidden" asp-for="HasImage" />
+        <partial name="_Form" model="Model" />
+        <button type="submit" class="btn btn-teal">Save changes</button>
+        <a class="btn btn-link" asp-action="Index">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

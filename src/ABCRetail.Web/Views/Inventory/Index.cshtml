@@ -1,0 +1,90 @@
+@model InventoryForm
+@{
+    ViewData["Title"] = "Inventory";
+    var products = ViewBag.Products as IReadOnlyList<Product> ?? Array.Empty<Product>();
+    var logs = ViewBag.Logs as IReadOnlyList<StoredFile> ?? Array.Empty<StoredFile>();
+}
+
+<h1 class="page-title">Inventory</h1>
+<p class="page-lead">Restock and reduce requests go onto the <strong>inventory-processing</strong> queue. The function updates the product stock.</p>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="panel">
+            <form asp-action="Index" method="post">
+                <div class="mb-3">
+                    <label asp-for="ProductId" class="form-label"></label>
+                    <select asp-for="ProductId" class="form-select">
+                        <option value="">Select a product</option>
+                        @foreach (var product in products)
+                        {
+                            <option value="@product.RowKey">@product.ProductName (@product.StockQuantity in stock)</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ProductId" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Operation" class="form-label"></label>
+                    <select asp-for="Operation" class="form-select">
+                        <option value="@InventoryOperations.Restock">Restock</option>
+                        <option value="@InventoryOperations.Reduce">Reduce</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Quantity" class="form-label"></label>
+                    <input asp-for="Quantity" class="form-control" type="number" min="1" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Reason" class="form-label"></label>
+                    <input asp-for="Reason" class="form-control" />
+                </div>
+                <button type="submit" class="btn btn-teal">Queue transaction</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="panel">
+            <h2 class="h5">Current stock</h2>
+            @if (products.Count == 0)
+            {
+                <p class="mb-0">Add a product before adjusting stock.</p>
+            }
+            else
+            {
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in products)
+                        {
+                            <tr>
+                                <td>@product.ProductName</td>
+                                <td>@product.StockQuantity</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+
+            @if (logs.Count > 0)
+            {
+                <h2 class="h5 mt-4">Recent inventory logs</h2>
+                <ul class="mb-0">
+                    @foreach (var log in logs)
+                    {
+                        <li><a asp-controller="Logs" asp-action="Download" asp-route-name="@log.Name">@log.Name</a></li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

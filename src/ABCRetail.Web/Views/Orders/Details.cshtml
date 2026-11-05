@@ -1,0 +1,24 @@
+@model OrderEntity
+@{
+    ViewData["Title"] = Model.RowKey;
+}
+
+<h1 class="page-title">@Model.RowKey</h1>
+<p class="page-lead">Submitted @Model.SubmittedAtUtc.ToLocalTime().ToString("g")</p>
+<div class="panel">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Customer</dt>
+        <dd class="col-sm-9">@Model.CustomerName</dd>
+        <dt class="col-sm-3">Product</dt>
+        <dd class="col-sm-9">@Model.Quantity × @Model.ProductName</dd>
+        <dt class="col-sm-3">Unit price</dt>
+        <dd class="col-sm-9">@Model.UnitPrice.ToString("C")</dd>
+        <dt class="col-sm-3">Total</dt>
+        <dd class="col-sm-9">@Model.TotalAmount.ToString("C")</dd>
+        <dt class="col-sm-3">Status</dt>
+        <dd class="col-sm-9">@Model.Status</dd>
+        <dt class="col-sm-3">Note</dt>
+        <dd class="col-sm-9">@Model.Note</dd>
+    </dl>
+    <a class="btn btn-link px-0 mt-3" asp-action="Index">Back to orders</a>
+</div>

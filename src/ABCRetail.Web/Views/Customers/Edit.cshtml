@@ -1,0 +1,19 @@
+@model Customer
+@{
+    ViewData["Title"] = "Edit customer";
+}
+
+<h1 class="page-title">Edit customer</h1>
+<p class="page-lead">Updates the existing table entity. The row key stays the same.</p>
+<div class="panel">
+    <form asp-action="Edit" asp-route-id="@Model.RowKey" method="post">
+        <input type="hidden" asp-for="RowKey" />
+        <partial name="_Form" model="Model" />
+        <button type="submit" class="btn btn-teal">Save changes</button>
+        <a class="btn btn-link" asp-action="Index">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

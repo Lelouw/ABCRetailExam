@@ -1,0 +1,13 @@
+@model Product
+@{
+    ViewData["Title"] = "Delete product";
+}
+
+<h1 class="page-title">Delete product</h1>
+<p class="page-lead">This removes <strong>@Model.ProductName</strong> from Table Storage and deletes its blob.</p>
+<div class="panel">
+    <form asp-action="Delete" asp-route-id="@Model.RowKey" method="post">
+        <button type="submit" class="btn btn-danger">Delete product</button>
+        <a class="btn btn-link" asp-action="Index">Cancel</a>
+    </form>
+</div>

@@ -1,0 +1,63 @@
+﻿@model HomeDashboard
+@{
+    ViewData["Title"] = "Home";
+}
+
+<h1 class="page-title">Retail operations on Azure</h1>
+<p class="page-lead">Each screen below is mapped to the storage service that holds that part of the business.</p>
+
+@if (!Model.StorageConfigured)
+{
+    <div class="alert alert-warning">No storage connection string is configured. Start Azurite for local work, or add the Azure connection string before demonstrating the system.</div>
+}
+else if (!string.IsNullOrWhiteSpace(Model.StorageError))
+{
+    <div class="alert alert-danger">@Model.StorageError</div>
+}
+else
+{
+    <div class="stat-grid">
+        <div class="stat"><span>Customers</span><strong>@Model.CustomerCount</strong></div>
+        <div class="stat"><span>Products</span><strong>@Model.ProductCount</strong></div>
+        <div class="stat"><span>Queued orders</span><strong>@Model.QueuedOrderCount</strong></div>
+        <div class="stat"><span>Contracts</span><strong>@Model.ContractCount</strong></div>
+    </div>
+}
+
+<div class="service-grid">
+    <a class="service-card" asp-controller="Readings" asp-action="Index">
+        <span class="eyebrow">Queue, Functions, and Azure SQL</span>
+        <h2>Live readings</h2>
+        <p>Send a sensor reading onto the telemetry queue. The function checks it, marks the level, and stores the result in TelemetryDb.</p>
+    </a>
+    <a class="service-card" asp-controller="Customers" asp-action="Index">
+        <span class="eyebrow">Table Storage</span>
+        <h2>Customers</h2>
+        <p>Profile records live in the Customers table. Create, edit, and delete from this screen.</p>
+    </a>
+    <a class="service-card" asp-controller="Products" asp-action="Index">
+        <span class="eyebrow">Table and Blob Storage</span>
+        <h2>Products</h2>
+        <p>Product fields are stored in a table. The photo is stored privately in Blob Storage and served by the app.</p>
+    </a>
+    <a class="service-card" asp-controller="Orders" asp-action="Index">
+        <span class="eyebrow">Queue Storage and Functions</span>
+        <h2>Orders</h2>
+        <p>Placing an order writes a queue message. The ProcessOrder function updates stock and writes a log.</p>
+    </a>
+    <a class="service-card" asp-controller="Inventory" asp-action="Index">
+        <span class="eyebrow">Queue Storage and Functions</span>
+        <h2>Inventory</h2>
+        <p>Restock and reduce requests are queued. The ProcessInventory function applies the stock change.</p>
+    </a>
+    <a class="service-card" asp-controller="Contracts" asp-action="Index">
+        <span class="eyebrow">Azure Files</span>
+        <h2>Contracts</h2>
+        <p>Supplier and customer files are uploaded to the contracts file share.</p>
+    </a>
+    <a class="service-card" asp-controller="Logs" asp-action="Index">
+        <span class="eyebrow">Azure Files</span>
+        <h2>Processing logs</h2>
+        <p>The functions write a text file for every order and inventory transaction they finish.</p>
+    </a>
+</div>

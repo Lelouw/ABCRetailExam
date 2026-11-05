@@ -1,0 +1,49 @@
+@model IReadOnlyList<Customer>
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<div class="d-flex justify-content-between align-items-center">
+    <div>
+        <h1 class="page-title">Customers</h1>
+        <p class="page-lead">Stored in Azure Table Storage, partition <strong>Customer</strong>.</p>
+    </div>
+    <a class="btn btn-teal" asp-action="Create">Add customer</a>
+</div>
+
+<div class="panel">
+    @if (Model.Count == 0)
+    {
+        <p class="mb-0">No customers yet. Add one to create the first table entity.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var customer in Model)
+                    {
+                        <tr>
+                            <td>@customer.FullName</td>
+                            <td>@customer.Email</td>
+                            <td>@customer.PhoneNumber</td>
+                            <td class="text-end">
+                                <a asp-action="Details" asp-route-id="@customer.RowKey">Details</a>
+                                <a class="ms-2" asp-action="Edit" asp-route-id="@customer.RowKey">Edit</a>
+                                <a class="ms-2" asp-action="Delete" asp-route-id="@customer.RowKey">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

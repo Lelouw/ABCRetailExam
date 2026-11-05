@@ -1,0 +1,36 @@
+@model OrderForm
+@{
+    ViewData["Title"] = "Place order";
+}
+
+<h1 class="page-title">Place order</h1>
+<p class="page-lead">Submitting this form does not change stock immediately. The ProcessOrder function does that when it reads the queue.</p>
+<div class="panel">
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="CustomerId" class="form-label"></label>
+            <select asp-for="CustomerId" class="form-select" asp-items="ViewBag.Customers">
+                <option value="">Select a customer</option>
+            </select>
+            <span asp-validation-for="CustomerId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ProductId" class="form-label"></label>
+            <select asp-for="ProductId" class="form-select" asp-items="ViewBag.Products">
+                <option value="">Select a product</option>
+            </select>
+            <span asp-validation-for="ProductId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Quantity" class="form-label"></label>
+            <input asp-for="Quantity" class="form-control" type="number" min="1" />
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-teal">Queue order</button>
+        <a class="btn btn-link" asp-action="Index">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

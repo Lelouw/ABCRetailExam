@@ -1,0 +1,61 @@
+@model IReadOnlyList<Product>
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="d-flex justify-content-between align-items-center">
+    <div>
+        <h1 class="page-title">Products</h1>
+        <p class="page-lead">Details are in Table Storage. Images are in the private <strong>product-images</strong> container.</p>
+    </div>
+    <a class="btn btn-teal" asp-action="Create">Add product</a>
+</div>
+
+<div class="panel">
+    @if (Model.Count == 0)
+    {
+        <p class="mb-0">No products yet.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Product</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(product.ImageBlobName))
+                                {
+                                    <img class="thumb" src="@Url.Action("Image", new { id = product.RowKey })" alt="" />
+                                }
+                            </td>
+                            <td>
+                                <strong>@product.ProductName</strong>
+                                <div class="text-muted">@product.Description</div>
+                            </td>
+                            <td>@product.Category</td>
+                            <td>@product.Price.ToString("C")</td>
+                            <td>@product.StockQuantity</td>
+                            <td class="text-end">
+                                <a asp-action="Details" asp-route-id="@product.RowKey">Details</a>
+                                <a class="ms-2" asp-action="Edit" asp-route-id="@product.RowKey">Edit</a>
+                                <a class="ms-2" asp-action="Delete" asp-route-id="@product.RowKey">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

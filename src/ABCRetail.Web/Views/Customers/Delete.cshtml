@@ -1,0 +1,13 @@
+@model Customer
+@{
+    ViewData["Title"] = "Delete customer";
+}
+
+<h1 class="page-title">Delete customer</h1>
+<p class="page-lead">This removes <strong>@Model.FullName</strong> from Azure Table Storage.</p>
+<div class="panel">
+    <form asp-action="Delete" asp-route-id="@Model.RowKey" method="post">
+        <button type="submit" class="btn btn-danger">Delete customer</button>
+        <a class="btn btn-link" asp-action="Index">Cancel</a>
+    </form>
+</div>

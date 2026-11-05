@@ -1,0 +1,18 @@
+@model ProductForm
+@{
+    ViewData["Title"] = "Add product";
+}
+
+<h1 class="page-title">Add product</h1>
+<p class="page-lead">The image is required so Blob Storage is part of the create flow.</p>
+<div class="panel">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <partial name="_Form" model="Model" />
+        <button type="submit" class="btn btn-teal">Save product</button>
+        <a class="btn btn-link" asp-action="Index">Cancel</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

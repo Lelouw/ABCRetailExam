@@ -1,0 +1,21 @@
+@model Customer
+@{
+    ViewData["Title"] = Model.FullName;
+}
+
+<h1 class="page-title">@Model.FullName</h1>
+<p class="page-lead">Table row <code>@Model.RowKey</code></p>
+<div class="panel">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Email</dt>
+        <dd class="col-sm-9">@Model.Email</dd>
+        <dt class="col-sm-3">Phone</dt>
+        <dd class="col-sm-9">@Model.PhoneNumber</dd>
+        <dt class="col-sm-3">Address</dt>
+        <dd class="col-sm-9">@Model.Address</dd>
+    </dl>
+    <div class="mt-3">
+        <a class="btn btn-teal" asp-action="Edit" asp-route-id="@Model.RowKey">Edit</a>
+        <a class="btn btn-link" asp-action="Index">Back</a>
+    </div>
+</div>
